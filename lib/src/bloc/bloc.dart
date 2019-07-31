@@ -1,9 +1,13 @@
 import '../models/bank.dart';
+import 'dart:async';
+import 'package:rxdart/rxdart.dart';
 
 class Bloc {
-  List<Bank> banks = [];
+  final _bankStreamController = ReplaySubject<Bank>();
 
-  final namesOfBanks = [
+  List<Bank> _banks = [];
+
+  final _namesOfBanks = [
     'البنك الاهلى الكويتى',
     'البنك الاهلى المصرى',
     'بنك البركه',
@@ -15,7 +19,7 @@ class Bloc {
     'كريدى أجريكول',
   ];
 
-  final logosOfBanks = [
+  final _logosOfBanks = [
     'abk.png',
     'ahli.png',
     'baraka.png',
@@ -28,15 +32,24 @@ class Bloc {
   ];
 
   Bloc() {
-    for (int i = 0; i < namesOfBanks.length; i++) {
+    for (int i = 0; i < _namesOfBanks.length; i++) {
       final bank = Bank(
-        name: namesOfBanks[i],
-        logo: logosOfBanks[i],
+        name: _namesOfBanks[i],
+        logo: _logosOfBanks[i],
         dollarBuyPrice: 16.550,
         dollarSellPrice: 16.550,
         dollarMovement: 'منذ 3 ساعه / منذ 28',
       );
-      banks.add(bank);
+      _banks.add(bank);
+      _bankStreamController.sink.add(bank);
     }
   }
+
+  Stream<Bank> getBankStream() => _bankStreamController.stream;
+
+  dispose() {
+    _bankStreamController.close();
+  }
 }
+
+final bloc = Bloc();
