@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 
 class Bloc {
-  final _bankStreamController = ReplaySubject<Bank>();
+  final _bankStreamController = BehaviorSubject<List<Bank>>();
 
   List<Bank> _banks = [];
 
@@ -20,7 +20,7 @@ class Bloc {
   ];
 
   final _logosOfBanks = [
-    'abk.png',
+    'abk.jpg',
     'ahli.png',
     'baraka.png',
     'idb_logo.png',
@@ -35,17 +35,18 @@ class Bloc {
     for (int i = 0; i < _namesOfBanks.length; i++) {
       final bank = Bank(
         name: _namesOfBanks[i],
-        logo: _logosOfBanks[i],
+        logoName: _logosOfBanks[i],
         dollarBuyPrice: 16.550,
         dollarSellPrice: 16.550,
         dollarMovement: 'منذ 3 ساعه / منذ 28',
       );
       _banks.add(bank);
-      _bankStreamController.sink.add(bank);
     }
+
+    _bankStreamController.sink.add(_banks);
   }
 
-  Stream<Bank> getBankStream() => _bankStreamController.stream;
+  Stream<List<Bank>> getBankStream() => _bankStreamController.stream;
 
   dispose() {
     _bankStreamController.close();

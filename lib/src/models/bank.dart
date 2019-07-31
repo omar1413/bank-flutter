@@ -1,14 +1,15 @@
 class Bank {
   String name;
-  String logo;
+  String logoUri;
   double dollarBuyPrice;
   double dollarSellPrice;
   String dollarMovement;
 
   Bank(
       {this.name,
-      this.logo,
+      String logoName,
       this.dollarBuyPrice,
       this.dollarSellPrice,
-      this.dollarMovement});
+      this.dollarMovement})
+      : this.logoUri = 'images/' + logoName;
 }
